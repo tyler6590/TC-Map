@@ -187,8 +187,9 @@ function renderList() {
   list.innerHTML = "";
   ranked.forEach((p, i) => {
     const st = statusOf(p);
-    const row = document.createElement("button");
+    const row = document.createElement("div");
     row.className = "person" + (p.id === state.selectedPersonId ? " active" : "");
+    row.setAttribute("role", "button");
     row.innerHTML = `
       <div class="dot ${st}"></div>
       <div>
@@ -198,6 +199,17 @@ function renderList() {
       </div>
       <div class="rank">#${i + 1}</div>`;
     row.addEventListener("click", () => focusPerson(p.id, true));
+    row.addEventListener("dblclick", () => openPersonEditor(p.id));
+    const edit = document.createElement("button");
+    edit.type = "button";
+    edit.className = "ghost";
+    edit.style.cssText = "flex:0;padding:6px 8px;font-size:11px;margin-left:6px";
+    edit.textContent = "Edit";
+    edit.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openPersonEditor(p.id);
+    });
+    row.appendChild(edit);
     list.appendChild(row);
   });
   if (!ranked.length) {
@@ -286,9 +298,25 @@ async function geocode(city, stateCode) {
 
 function openModal(id) {
   document.getElementById(id).classList.add("show");
+  document.body.style.overflow = "hidden";
 }
 function closeModal(id) {
   document.getElementById(id).classList.remove("show");
+  document.body.style.overflow = "hidden";
+}
+function openPersonEditor(id) {
+  const p = state.people.find((x) => x.id === id);
+  if (!p) return;
+  fillAccountOptions("personAccount", p.accountId);
+  document.getElementById("personName").value = p.name;
+  document.getElementById("personTitle").value = p.title || "";
+  document.getElementById("personCity").value = p.city || "";
+  document.getElementById("personState").value = p.state || "";
+  document.getElementById("personTouch").value = p.lastTouch || "";
+  document.getElementById("personChampion").checked = !!p.champion;
+  document.getElementById("personModal").dataset.editId = p.id;
+  document.getElementById("personModalTitle").textContent = "Update rep";
+  openModal("personModal");
 }
 
 function fillAccountOptions(selectId, selected) {
