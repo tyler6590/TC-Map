@@ -1,4 +1,4 @@
-const CACHE = "partner-rep-map-v1";
+const CACHE = "partner-rep-map-v2";
 const ASSETS = [
   "./",
   "./index.html",
