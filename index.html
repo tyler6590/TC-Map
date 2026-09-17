@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0B1F33">
+  <title>Partner Rep Map</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div>
+          <h1>Partner Rep Map</h1>
+          <small>Sample data · Champion is manual</small>
+        </div>
+        <button class="icon-btn" id="resetBtn" title="Reload sample">↻</button>
+      </div>
+      <div class="row">
+        <select id="viewMode" class="grow" aria-label="View mode">
+          <option value="one">One account</option>
+          <option value="multi">All accounts</option>
+        </select>
+        <select id="accountSelect" class="grow" aria-label="Account"></select>
+      </div>
+      <div class="filters">
+        <button class="chip on all" data-filter="all">All</button>
+        <button class="chip champion" data-filter="champion">Champions</button>
+        <button class="chip warm" data-filter="warm">Warm</button>
+        <button class="chip cold" data-filter="cold">Cold</button>
+      </div>
+    </header>
+
+    <div style="position:relative; min-height:0;">
+      <div id="map"></div>
+      <div class="legend">
+        <div><span style="background:#3ddc97"></span>Champion (you pick)</div>
+        <div><span style="background:#f0b429"></span>Warm ≤ 90 days</div>
+        <div><span style="background:#8b9cb0"></span>Cold</div>
+      </div>
+      <div class="fab-row">
+        <button class="fab secondary" id="fitBtn" title="Fit map">◎</button>
+        <button class="fab secondary" id="addAccountBtn" title="Add account">A+</button>
+        <button class="fab" id="addPersonBtn" title="Add rep">+</button>
+      </div>
+    </div>
+
+    <section class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-head">
+        <h2 id="sheetTitle">Account</h2>
+        <div class="counts" id="sheetCounts"></div>
+      </div>
+      <div class="list" id="list"></div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="accountModal">
+    <div class="modal">
+      <h3>Add partner account</h3>
+      <div class="field">
+        <label>Account name</label>
+        <input id="newAccountName" placeholder="Pellera">
+      </div>
+      <div class="actions">
+        <button class="ghost" data-close="accountModal">Cancel</button>
+        <button class="primary" id="saveAccount">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="personModal">
+    <div class="modal">
+      <h3 id="personModalTitle">Add rep</h3>
+      <div class="field">
+        <label>Name</label>
+        <input id="personName" placeholder="Jane Doe" autocomplete="name">
+      </div>
+      <div class="field">
+        <label>Title</label>
+        <input id="personTitle" placeholder="Account Executive">
+      </div>
+      <div class="field">
+        <label>Account</label>
+        <select id="personAccount"></select>
+      </div>
+      <div class="row">
+        <div class="field grow">
+          <label>City</label>
+          <input id="personCity" placeholder="Dallas">
+        </div>
+        <div class="field" style="width:90px">
+          <label>State</label>
+          <input id="personState" placeholder="TX" maxlength="2">
+        </div>
+      </div>
+      <div class="field">
+        <label>Last touch</label>
+        <input id="personTouch" type="date">
+      </div>
+      <label class="check">
+        <input type="checkbox" id="personChampion">
+        Mark as Champion (your call, not automatic)
+      </label>
+      <div class="actions">
+        <button class="ghost" data-close="personModal">Cancel</button>
+        <button class="primary" id="savePerson">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="sample-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
